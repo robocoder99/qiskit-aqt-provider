@@ -52,11 +52,12 @@ class AQTSimulator(BaseBackend):
             provider=provider)
 
     def run(self, qobj):
-        aqt_json = qobj_to_aqt.qobj_to_aqt(qobj)[0]
+        aqt_qobj = qobj_to_aqt.qobj_to_aqt(qobj)
         header = {"SDK": "qiskit"}
-        print(qobj)
-        print(aqt_json)
+        #print(qobj)
+        #print("\n\n\n\n")
+        #print(aqt_qobj)
 
-        job = aqt_job.AQTJob(self, 0, qobj=qobj)
+        job = aqt_job.AQTJob(self, 0, qobj=qobj, aqt_qobj=aqt_qobj)
         return job
 

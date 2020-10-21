@@ -38,9 +38,9 @@ def _experiment_to_seq(experiment):
         elif inst.name == 'rz':
             line = 'self.rz({}, {})'.format(inst.params[0], inst.qubits[0])
         elif inst.name == 'cx':
-            line = 'self.cnot({}, {})'.format(inst.params[1], inst.qubits[0])
+            line = 'self.cnot({}, {})'.format(inst.qubits[1], inst.qubits[0])
         elif inst.name == 'cz':
-            line = 'self.cz({}, {})'.format(inst.params[1], inst.qubits[0])
+            line = 'self.cz({}, {})'.format(inst.qubits[1], inst.qubits[0])
         elif inst.name == 'measure':
             meas += 1
             continue
@@ -54,7 +54,7 @@ def _experiment_to_seq(experiment):
     
     if not meas:
         raise ValueError('Circuit must have at least one measurements.')
-    return json.dumps(ops)
+    return ops
 
 
 def qobj_to_aqt(qobj):
@@ -89,5 +89,5 @@ def qobj_to_aqt(qobj):
     # Add measurement
     out.append("\t\tself.detect_all()")
     out.append("\t\tr = self.measure_all()")
-
+    
     return out
