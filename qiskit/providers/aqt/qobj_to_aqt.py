@@ -38,9 +38,9 @@ def _experiment_to_seq(experiment):
         elif inst.name == 'rz':
             line = 'self.rz({}, {})'.format(inst.params[0], inst.qubits[0])
         elif inst.name == 'cx':
-            line = 'self.cnot({}, {})'.format(inst.qubits[1], inst.qubits[0])
+            line = 'self.cnot({}, {})'.format(inst.qubits[0], inst.qubits[1])
         elif inst.name == 'cz':
-            line = 'self.cz({}, {})'.format(inst.qubits[1], inst.qubits[0])
+            line = 'self.cz({}, {})'.format(inst.qubits[0], inst.qubits[1])
         elif inst.name == 'measure':
             meas += 1
             continue
@@ -82,8 +82,8 @@ def qobj_to_aqt(qobj):
 
     # Add lines
     for experiment in qobj.experiments:
-        out.append(["\t\t{}".format(l) 
-            for l in _experiment_to_seq(experiment)])
+        out += ["\t\t{}".format(l) 
+            for l in _experiment_to_seq(experiment)]
 
 
     # Add measurement

@@ -13,5 +13,9 @@ qc.cx(0, 1)
 qc.measure([0,1], [0,1])
 job = execute(qc, backend) #execute returns backend.run(), which is a job
 
-print(job.result())
+code = job.result().results[0].dax_code
+
+print("--- DAX Code ---\n")
+for l in code:
+    print(l)
 

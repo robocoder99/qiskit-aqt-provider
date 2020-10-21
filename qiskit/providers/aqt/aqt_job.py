@@ -39,7 +39,8 @@ class AQTJob(BaseJob):
             {
                 'success': True,
                 'shots': len(result['samples']),
-                'data': {'dax_code': self.aqt_qobj},
+                'dax_code': self.aqt_qobj,
+                'data': {},
                 'header': {'name': self.qobj.experiments[0].header.name}
             }]
 
@@ -56,7 +57,7 @@ class AQTJob(BaseJob):
         pass
 
     def status(self):
-        return  'success'        
+        return 'success'        
 
     def submit(self):
         pass
