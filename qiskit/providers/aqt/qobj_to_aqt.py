@@ -80,11 +80,14 @@ def qobj_to_aqt(qobj):
     out.append("\t@kernel")
     out.append("\tdef run(self):")
 
-    # Add lines
     for experiment in qobj.experiments:
+        # Init ions
+        out.append("\t\tself.load_ions({})".format(experiment.config.n_qubits))
+        out.append("\t\tself.initialize_all()")
+        
+        # Add lines
         out += ["\t\t{}".format(l) 
             for l in _experiment_to_seq(experiment)]
-
 
     # Add measurement
     out.append("\t\tself.detect_all()")
