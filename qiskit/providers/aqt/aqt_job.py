@@ -53,6 +53,11 @@ class AQTJob(BaseJob):
             'job_id': self._job_id,
         })
 
+    def print_dax(self):
+        print("--- DAX Code ---\n")
+        for l in self.aqt_qobj:
+            print(l)
+
     def cancel(self):
         pass
 
