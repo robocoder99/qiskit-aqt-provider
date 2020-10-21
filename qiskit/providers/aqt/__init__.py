@@ -1,5 +1,5 @@
-from .aqt_account import AQTAccount
+from .aqt_provider import AQTProvider
 from . import version
 
-AQT = AQTAccount()
+AQT = AQTProvider()
 __version__ = version.__version__

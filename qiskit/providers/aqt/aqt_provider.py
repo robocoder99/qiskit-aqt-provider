@@ -16,27 +16,32 @@
 from qiskit.providers.providerutils import filter_backends
 from qiskit.providers import BaseProvider
 
-from .aqt_backend import AQTSimulator, AQTSimulatorNoise1, AQTDevice
+from .aqt_backend import AQTSimulator
 
+"""
+        self._credentials = {'token': token, 'url': url}
+        provider = AQTProvider(token)
+        self._providers[provider.name] = provider
+        return provider
+"""
 
 class AQTProvider(BaseProvider):
     """Provider for backends from Alpine Quantum Technologies (AQT)."""
 
-    def __init__(self, access_token):
-        super().__init__()
-
-        self.access_token = access_token
+    def __init__(self):
+        super().__init__()        
         self.name = 'aqt_provider'
         # Populate the list of AQT backends
-        self._backends = [AQTSimulator(provider=self),
-                          AQTSimulatorNoise1(provider=self),
-                          AQTDevice(provider=self)]
+        self._backends = [AQTSimulator(provider=self)]
 
     def __str__(self):
         return "<AQTProvider(name={})>".format(self.name)
 
     def __repr__(self):
         return self.__str__()
+
+    def get_provider(self):
+        return self
 
     def backends(self, name=None, filters=None, **kwargs):
         """A listing of all backends from this provider.
