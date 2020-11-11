@@ -36,7 +36,7 @@ class AQTSimulator(BaseBackend):
             'memory': False,
             'n_qubits': 11,
             'conditional': False,
-            'max_shots': 1024,
+            'max_shots': 1024,            
             'max_experiments': 1,
             'open_pulse': False,
             'gates': [
@@ -51,13 +51,9 @@ class AQTSimulator(BaseBackend):
             configuration=BackendConfiguration.from_dict(configuration),
             provider=provider)
 
-    def run(self, qobj):
-        aqt_qobj = qobj_to_aqt.qobj_to_aqt(qobj)
-        header = {"SDK": "qiskit"}
-        #print(qobj)
-        #print("\n\n\n\n")
-        #print(aqt_qobj)
+    def run(self, qobj):        
+        aqt_qobj = qobj_to_aqt.qobj_to_aqt(qobj, qobj.config.shots)
+        header = {"SDK": "qiskit"}  
 
         job = aqt_job.AQTJob(self, 0, qobj=qobj, aqt_qobj=aqt_qobj)
         return job
-

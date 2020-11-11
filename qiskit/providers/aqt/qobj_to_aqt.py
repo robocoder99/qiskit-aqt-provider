@@ -57,7 +57,7 @@ def _experiment_to_seq(experiment):
     return ops
 
 
-def qobj_to_aqt(qobj):
+def qobj_to_aqt(qobj, shots):
     """Return a list of DAX code strings for each experiment in a qobj
 
     If we were actually working with the hardware we would be executing these code strings
@@ -73,13 +73,29 @@ def qobj_to_aqt(qobj):
     # Setup class
     out.append("from dax.experiment import *")
     out.append("class ConstructedExperiment(EnvExperiment):")
+
+    # Setup Class' build method
     out.append("\tdef build(self):")
     out.append("\t\tself.setattr_device('core')")
+    out.append(f"\t\tself.num_iterations = {shots}") # (x = number of shots)
+    
+    # Setup Class' run method
+    out.append("\tdef run():")
+    out.append("\t\tself._run()")
+    out.append("\t\treturn self.result_list")
 
-    # Setup kernel
+    ## Setup kernel
     out.append("\t@kernel")
-    out.append("\tdef run(self):")
 
+    # Setup kernel _run() method (never changes)
+    out.append("\tdef _run(self):")
+    out.append("\t\tfor _ range(self.num_iterations):")
+    out.append("\t\t\tr = self._qiskit_kernel()")
+    out.append("\t\t\tself._collect_data(r)")
+
+    # Defining _qiskit_kernel() method (this is the QC program)
+    out.append("\tkernel")
+    out.append("\tdef _qiskit_kernel():")
     for experiment in qobj.experiments:
         # Init ions
         out.append("\t\tself.load_ions({})".format(experiment.config.n_qubits))
@@ -92,5 +108,6 @@ def qobj_to_aqt(qobj):
     # Add measurement
     out.append("\t\tself.detect_all()")
     out.append("\t\tr = self.measure_all()")
+    out.append("\t\treturn r")
     
     return out
